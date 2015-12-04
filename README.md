@@ -9,8 +9,8 @@ Issued under an MIT license, see LICENSE file.
 
 This is backed by two Ordinance Survey products:
 
-    - Address Base Premium: This provides all the details of actual addresses. [https://www.ordnancesurvey.co.uk/psma/index.html](https://www.ordnancesurvey.co.uk/psma/index.html)
-    - Code Point: Provides a mapping between postcode and a number of ONS statistical codes, these codes are used to identify Local Authorities, countries and electoral wards.
+* Address Base Premium: This provides all the details of actual addresses. [https://www.ordnancesurvey.co.uk/psma/index.html](https://www.ordnancesurvey.co.uk/psma/index.html)
+* Code Point: Provides a mapping between postcode and a number of ONS statistical codes, these codes are used to identify Local Authorities, countries and electoral wards.
 
 Additionally we use the ONS Local Authority dataset, manually linked to the OS local custodian dataset to provide extra validation of the Address to Local Authority resolution.
 
