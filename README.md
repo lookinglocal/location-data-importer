@@ -34,12 +34,12 @@ NLPG Data entry conventions:
 
 The importer compiles to a jar:
 
-(1) Use SBT to build project (from project root)
+1. Use SBT to build project (from project root)
 
     $ ./sbt
     > assembly
 
-(2) Run jar (from project root)
+2. Run jar (from project root)
 
     $ java -jar target/scala-2.10/location-data-importer.jar
 
@@ -100,7 +100,7 @@ Mongo:
 
 ### Process:
 
-(1) Code point files parsed and inserted into the Mongo DB. This is done upfront as we make a reference table to query address postcodes against to discover GSS codes.
+1. Code point files parsed and inserted into the Mongo DB. This is done upfront as we make a reference table to query address postcodes against to discover GSS codes.
 
 Fields:
 
@@ -140,7 +140,7 @@ Fields:
             "ward" : "S13002483"
         }
 
-(2) Address base files are parsed for Street data and inserted into the Mongo DB.
+2. Address base files are parsed for Street data and inserted into the Mongo DB.
 
     - The persisted street objects are a join between the Address Base Premium notions of
         - Street
@@ -163,7 +163,7 @@ Fields:
             "file" : "TQ1565.csv"
         }
 
-(3) Address base files are then processed a second time to build up addresses.
+3. Address base files are then processed a second time to build up addresses.
 
     - Address base files contain several types of row, we care about:
         - BLPU 
@@ -181,12 +181,12 @@ Fields:
 
     - Filtering BLPUs
         - We don't treat all BLPUs as valid, and some will be skipped according to the following rules:
-        (1) BLPU has an end date. We only want current BLPUs
-        (2) No associated LPI available.
-        (3) No active LPI available.
-        (4) No classification available.
-        (5) No matching CodePoint entry
-        (6) No matching active street
+        1. BLPU has an end date. We only want current BLPUs
+        2. No associated LPI available.
+        3. No active LPI available.
+        4. No classification available.
+        5. No matching CodePoint entry
+        6. No matching active street
 
 (4) Persisting Addresses
 
@@ -231,17 +231,17 @@ Fields:
                 "paoText" : "poboxnumber1487"
             }
 }
-(5) Processing files
+5. Processing files
 
     - Directories supplied by the user on the command line are checked for having only CSV files. An error is anything else is present.
 
     - Files are checked for validity on a per row basis - for correct number of columns per type, and for having the mandatory fields required to create the above data structures.
 
-(6) Logging
+6. Logging
 
     Uses Java logging - logback.xml to configure
 
-(7) Credentials
+7. Credentials
 
     Credentials for APIs are not created  by the application. In order to create tokens for the API clients:
 
@@ -273,11 +273,11 @@ The docs directory contains a geojson file containing the data which can be impo
 
 Pre/Post import it's worth checking the state of the nation:
 
-(1) Get full count:
+1. Get full count:
 
     db.addresses.count()
 
-(2) Count per Local Authority, stores results in the collection local_authority_test:
+2. Count per Local Authority, stores results in the collection local_authority_test:
 
     db.addresses.mapReduce(
     	function() {emit(this.gssCode, 1);},
@@ -287,7 +287,7 @@ Pre/Post import it's worth checking the state of the nation:
     	}
     )
 
-(2) Count per postcode, stores results in the collection postcode_test:
+3. Count per postcode, stores results in the collection postcode_test:
 
     db.addresses.mapReduce(
     	function() {emit(this.postcode, 1);},
@@ -297,14 +297,14 @@ Pre/Post import it's worth checking the state of the nation:
     	}
     )
 
-(3) Extract the data into CSV files.
+4. Extract the data into CSV files.
 
     mongoexport -d locate -c local_authority_test --csv  --fields _id,value -o local_authority_test.csv
 
     mongoexport -d locate -c postcode_test --csv  --fields _id,value -o postcode_test.csv
 
 
-(4) Errors - Instances where address or file is rejected
+5. Errors - Instances where address or file is rejected
 
     * Invalid file - File has invalid rows - whole file skipped
 
@@ -328,7 +328,7 @@ Pre/Post import it's worth checking the state of the nation:
 
     * Audit - address failed to pass audit
 
-(5) Updates - Instances where Address Base address is modified as per Locate requirements
+6. Updates - Instances where Address Base address is modified as per Locate requirements
 
     * Using DeliveryPoint postcode - Delivery Point and BLPU differ on postcodes - using Delivery Point
 
