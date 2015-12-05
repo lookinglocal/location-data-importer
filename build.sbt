@@ -9,6 +9,7 @@ parallelExecution := false
 libraryDependencies ++= Seq(
     "org.geotools" % "gt-main" % "9.3",
     "org.geotools" % "gt-epsg-hsql" % "9.3",
+    "javax.media" %"jai_core" % "1.1.3" from "http://maven.geotoolkit.org/javax/media/jai_core/1.1.3/jai_core-1.1.3.jar",
     "com.github.scopt" %% "scopt" % "3.3.0",
     "com.github.scala-incubator.io" % "scala-io-core_2.11" % "0.4.3",
     "org.mongodb" %% "casbah" % "2.8.2",
@@ -19,7 +20,6 @@ libraryDependencies ++= Seq(
 
 resolvers ++= Seq(
     "maven" at "http://download.java.net/maven/2",
-    "maven-geotools" at "http://maven.geotoolkit.org",
     "geotools" at "http://download.osgeo.org/webdav/geotools",
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "GDS maven repo snapshots" at "http://alphagov.github.com/maven/snapshots"
