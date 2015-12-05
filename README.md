@@ -41,15 +41,15 @@ The importer compiles to a jar:
 
 2. Run jar (from project root)
 
-    $ java -jar target/scala-2.10/location-data-importer.jar
+    $ java -jar target/scala-2.11/location-data-importer.jar
 
 The jar runs with command line options. Help is available:
 
-     $ java -jar target/scala-2.10/location-data-importer.jar --help
+     $ java -jar target/scala-2.11/location-data-importer.jar --help
 
 Example run:
 
-    $ java -jar target/scala-2.10/location-data-importer.jar -a docs/examples/addressbase/ -c docs/examples/codepoint/
+    $ java -jar target/scala-2.11/location-data-importer.jar -a docs/examples/addressbase/ -c docs/examples/codepoint/
 
 A script in the root of the project runs the above:
 
