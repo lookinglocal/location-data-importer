@@ -82,3 +82,6 @@ edinburgh_sample.txt
 ems-data-parser/parse-assembly/.history
 ertp-database-redactor/bin/ertp_dump_tmp/*
 ertp-ems-csv/output/*
+
+# local cache of downloaded data
+cache
