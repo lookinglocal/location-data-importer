@@ -94,23 +94,23 @@ $ java -jar target/scala-2.11/location-data-importer.jar --help
 
 ### Fields
 
-* country: Derived from ONS codes:
+* **country**: Derived from ONS codes:
 
     England   | Scotland  | Wales     | N Ireland
     ----------|-----------|-----------|----------
     E92000001 | S92000003 | W92000004 | N92000002
 
-* gssCode: Unitary Authority, Metropolitan and Non- Metropolitan District, London Borough or Scottish Council Area in which postcode falls.
+* **gssCode**: Unitary Authority, Metropolitan and Non- Metropolitan District, London Borough or Scottish Council Area in which postcode falls.
 
-* easting/northing/lat/long: location of CPLC. CPLC is the location indicator for this code point. This is a point within the postcode area that is nearest the mean position of postal addresses. Not geographical central point.
+* **easting/northing/lat/long**: location of CPLC. CPLC is the location indicator for this code point. This is a point within the postcode area that is nearest the mean position of postal addresses. Not geographical central point.
 
-* nhsRegionalHealthAuthority: English Pan Strategic Health Authority in which CPLC falls. [optional]
+* **nhsRegionalHealthAuthority**: English Pan Strategic Health Authority in which CPLC falls. [optional]
 
-* nhsHealthAuthority: English Strategic Health Authority or Scottish Health Board in which CPLC falls. [optional]
+* **nhsHealthAuthority**: English Strategic Health Authority or Scottish Health Board in which CPLC falls. [optional]
 
-* county: County in which CPLC falls. [optional]
+* **county**: County in which CPLC falls. [optional]
 
-* ward: Electoral Ward or Division in which CPLC falls. [optional]
+* **ward**: Electoral Ward or Division in which CPLC falls. [optional]
 
 Example document
 
@@ -159,19 +159,19 @@ Example document
 3. Address base files are then processed a second time to build up addresses.
 
 Address base files contain several types of row, we care about:
-* BLPU 
+* **BLPU**
     Required – a BLPU is defined as a real-world object that is an ‘area of land, property or structure of fixed location having uniform occupation, ownership or function’. The BLPU is the core element of AddressBase Premium. In essence, a BLPU associates a real-world object on the ground to a UPRN.
 
-* LPI 
+* **LPI**
     Required – an LPI is a structured text entry that identifies a BLPU.
 
-* Organisation 
+* **Organisation**
     (Optional. Company at an address)
 
-* Classification 
+* **Classification**
     (Required. Current use of the property, i.e. residential or commercial, to some level of details)
 
-* DeliveryPoint
+* **DeliveryPoint**
     (Optional) Used to verify postcode on the BLPU. If there is a discrepency the DeliveryPoint postcode is used.
 
 Each CSV file denotes an area. Each file will contain many rows (can be 10,000s), and will contain rows of each of the types defined above. The uploader will load the entire file into memory and try and associate the BLPU with the appropriate LPI, Organisation and Classification. This is done by means of a UPRN which acts a primary key across these data types.
@@ -321,36 +321,24 @@ $ mongoexport -d locate -c postcode_test --csv  --fields _id,value -o postcode_t
 
 ### Errors
 
-Instances where address or file is rejected
+Instances where address or file is rejected:
 
 * Invalid file - File has invalid rows - whole file skipped
-
 * Invalid row - Row invalid in a file for the given type, provokes Invalid file error
-
 * BLPU is inactive - This BLPU is inactive, so skipped
-
 * BLPU has no matching LPI - No LPI available for this UPRN
-
 * BLPU has no matching active LPI for this UPRN
-
 * BLPU has no classification - BLPU has no classification entry
-
 * No street found - No street description for street
-
 * No active street - Street not active
-
 * No local authority found for address - No LA found for this address either in Locate mapping or in Codepoint
-
 * No street found for address - this Address cannot find a street
-
 * Audit - address failed to pass audit
 
 ### Updates
 
-Instances where Address Base address is modified as per Locate requirements
+Instances where Address Base address is modified as per Locate requirements:
 
 * Using DeliveryPoint postcode - Delivery Point and BLPU differ on postcodes - using Delivery Point
-
 * GSSCode and Custodian code mismatch - check code point related GSSCODE against one derived from Custodian code
-
 * Using delivery point for street - street type for this address is of type "street description" use delivery point street instead.
