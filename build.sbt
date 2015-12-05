@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
 
 resolvers ++= Seq(
     "maven" at "http://download.java.net/maven/2",
+    "maven-geotools" at "http://maven.geotoolkit.org",
     "geotools" at "http://download.osgeo.org/webdav/geotools",
     "sonatype-public" at "https://oss.sonatype.org/content/groups/public",
     "GDS maven repo snapshots" at "http://alphagov.github.com/maven/snapshots"
