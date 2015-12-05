@@ -1,7 +1,7 @@
 Location Data Importer
 ======================
 
-[![Build Status](https://travis-ci.org/openregister/locate-data-loader.svg?branch=master)](https://travis-ci.org/openregister/locate-data-loader)
+[![Build Status](https://travis-ci.org/openregister/locate-data-importer.svg?branch=master)](https://travis-ci.org/openregister/locate-data-importer)
 
 Location Data Importer is a scala application that imports Ordinance Survey data into a mongo database. Primarily it is used to back the locate-api which provides address and local authority lookups from postcode / GSS Code.
 
