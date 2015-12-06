@@ -25,10 +25,18 @@ NLPG Data entry conventions: [http://www.iahub.net/docs/1398672866952.pdf](http:
 
 ### Prerequisites
 
-The data is loaded into a mongo database: installed via:
+The data is loaded into a mongo database, which may be setup using:
 
 ```shell
 $ ./scripts/mongo/mongo-replica-set.sh
+```
+
+For a development machine, you can use:
+
+```shell
+$ ulimit -n 65536
+$ ulimit -u 2048
+$ ./scripts/mongo/mongo-single-node.sh
 ```
 
 ### Building
@@ -158,21 +166,15 @@ Example document
 
 3. Address base files are then processed a second time to build up addresses.
 
-Address base files contain several types of row, we care about:
-* **BLPU**
-    Required – a BLPU is defined as a real-world object that is an ‘area of land, property or structure of fixed location having uniform occupation, ownership or function’. The BLPU is the core element of AddressBase Premium. In essence, a BLPU associates a real-world object on the ground to a UPRN.
+AddressBase files contain several types of row, we care about:
 
-* **LPI**
-    Required – an LPI is a structured text entry that identifies a BLPU.
-
-* **Organisation**
-    (Optional. Company at an address)
-
-* **Classification**
-    (Required. Current use of the property, i.e. residential or commercial, to some level of details)
-
-* **DeliveryPoint**
-    (Optional) Used to verify postcode on the BLPU. If there is a discrepency the DeliveryPoint postcode is used.
+Field          | Needed   | Description
+---------------|----------|----------------------------------------
+BLPU           | Required | Basic Land and Property Unit, defined as a real-world object that is an ‘area of land, property or structure of fixed location having uniform occupation, ownership or function’. The BLPU is the core element of AddressBase Premium. In essence, a BLPU associates a real-world object on the ground to a UPRN.
+LPI            | Required | Land and Property Identifier, a structured text entry that identifies a BLPU.
+Organisation   | Optional | Company name at an address
+Classification | Required | Current use of the property, i.e. residential or commercial, to some level of details
+DeliveryPoint  | Optional | Used to verify postcode on the BLPU. If there is a discrepancy the DeliveryPoint postcode is used.
 
 Each CSV file denotes an area. Each file will contain many rows (can be 10,000s), and will contain rows of each of the types defined above. The uploader will load the entire file into memory and try and associate the BLPU with the appropriate LPI, Organisation and Classification. This is done by means of a UPRN which acts a primary key across these data types.
 
