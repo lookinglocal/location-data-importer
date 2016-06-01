@@ -59,6 +59,7 @@ case class AddressBaseWrapper(blpu: BLPU, lpi: LPI, classification: Classificati
   lazy val usrn = lpi.usrn
 }
 
+
 /*
   These are the models to capture raw address base data
  */
@@ -189,32 +190,30 @@ case class BLPU(
 
 object BLPU extends AddressBaseHelpers[BLPU] {
 
-
   val recordIdentifier = "21"
-  val requiredCsvColumns = 19
+  val requiredCsvColumns = 22
 
   private val uprnIndex = 3
   private val logicalStateIndex = 4
   private val blpuStateIndex = 5
   private val eastingIndex = 8
   private val northingIndex = 9
-  private val localCustodianCodeIndex = 11
-  private val startDateIndex = 12
-  private val endDateIndex = 13
-  private val updatedDateIndex = 14
-  private val receivesPostIndex = 16
-  private val postcodeIndex = 17
+  private val latitudeIndex = 10
+  private val longitudeIndex = 11
+  private val localCustodianCodeIndex = 13
+  private val startDateIndex = 15
+  private val endDateIndex = 16
+  private val updatedDateIndex = 17
+  private val receivesPostIndex = 18
+  private val postcodeIndex = 20
 
   def fromCsvLine(csvLine: List[String]) = {
-
-    val latLong = gridReferenceToLatLong(csvLine(eastingIndex), csvLine(northingIndex))
-
     BLPU(
       csvLine(uprnIndex),
       BlpuStateCode.forId(csvLine(blpuStateIndex)),
       LogicalStatusCode.forId(csvLine(logicalStateIndex)),
-      latLong.lat,
-      latLong.long,
+      csvLine(latitudeIndex),
+      csvLine(longitudeIndex),
       csvLine(localCustodianCodeIndex),
       csvLine(startDateIndex),
       csvLine(endDateIndex),
@@ -224,7 +223,7 @@ object BLPU extends AddressBaseHelpers[BLPU] {
     )
   }
 
-  val mandatoryCsvColumns = List(uprnIndex, logicalStateIndex, eastingIndex, northingIndex, localCustodianCodeIndex, startDateIndex, updatedDateIndex, postcodeIndex)
+  val mandatoryCsvColumns = List(uprnIndex, logicalStateIndex, eastingIndex, northingIndex, latitudeIndex, longitudeIndex, localCustodianCodeIndex, startDateIndex, updatedDateIndex, postcodeIndex)
 }
 
 /* Land and Property Identitifier */
@@ -302,6 +301,7 @@ object LPI extends AddressBaseHelpers[LPI] {
 
 }
 
+
 case class Street(usrn: String,
                   recordType: Option[StreetRecordTypeCode],
                   state: Option[StreetStateCode],
@@ -314,7 +314,7 @@ case class Street(usrn: String,
 
 object Street extends AddressBaseHelpers[Street] {
   val recordIdentifier = "11"
-  val requiredCsvColumns = 20
+  val requiredCsvColumns = 24
 
   private val usrnIndex = 3
   private val recordTypeIndex = 4
@@ -339,6 +339,7 @@ object Street extends AddressBaseHelpers[Street] {
   val mandatoryCsvColumns = List(usrnIndex, recordTypeIndex, startDateIndex, updatedDateIndex)
 }
 
+
 case class StreetDescriptor(
                              usrn: String,
                              streetDescription: String,
@@ -353,21 +354,19 @@ case class StreetDescriptor(
 
 object StreetDescriptor extends AddressBaseHelpers[StreetDescriptor] {
   val recordIdentifier = "15"
-  val requiredCsvColumns = 9
-
+  val requiredCsvColumns = 13
 
   private val usrnIndex = 3
   private val streetDescriptionIndex = 4
-  private val localityNameIndex = 5
+  private val localityIndex = 5
   private val townNameIndex = 6
   private val administrativeAreaIndex = 7
   private val languageIndex = 8
 
-
   def fromCsvLine(csvLine: List[String]) = StreetDescriptor(
     csvLine(usrnIndex),
     csvLine(streetDescriptionIndex),
-    csvLine(localityNameIndex),
+    csvLine(localityIndex),
     csvLine(townNameIndex),
     csvLine(administrativeAreaIndex),
     csvLine(languageIndex)
@@ -375,6 +374,7 @@ object StreetDescriptor extends AddressBaseHelpers[StreetDescriptor] {
 
   val mandatoryCsvColumns = List(usrnIndex, streetDescriptionIndex, languageIndex, administrativeAreaIndex)
 }
+
 
 case class Organisation(
                          uprn: String,
@@ -405,6 +405,7 @@ object Organisation extends AddressBaseHelpers[Organisation] {
   val mandatoryCsvColumns = List(uprnIndex, organisationIndex, startDateIndex, updatedDateIndex)
 }
 
+
 case class DeliveryPoint(
                           uprn: String,
                           subBuildingName: Option[String],
@@ -424,14 +425,14 @@ object DeliveryPoint extends AddressBaseHelpers[DeliveryPoint] {
   val requiredCsvColumns = 29
 
   private val uprnIndex = 3
-  private val subBuildingNameIndex = 8
-  private val buildingNameIndex = 9
-  private val buildingNumberIndex = 10
-  private val dependantThoroughfareNameIndex = 11
-  private val thoroughfareNameIndex = 12
-  private val doubleDependantLocality = 13
-  private val dependantLocality = 14
-  private val postcodeIndex = 16
+  private val subBuildingNameIndex = 7
+  private val buildingNameIndex = 8
+  private val buildingNumberIndex = 9
+  private val dependantThoroughfareIndex = 10
+  private val thoroughfareIndex = 11
+  private val doubleDependantLocality = 12
+  private val dependantLocality = 13
+  private val postcodeIndex = 15
   private val startDateIndex = 25
   private val endDateIndex = 26
   private val updatedDateIndex = 27
@@ -443,8 +444,8 @@ object DeliveryPoint extends AddressBaseHelpers[DeliveryPoint] {
     csvLine(subBuildingNameIndex),
     csvLine(buildingNameIndex),
     csvLine(buildingNumberIndex),
-    csvLine(dependantThoroughfareNameIndex),
-    csvLine(thoroughfareNameIndex),
+    csvLine(dependantThoroughfareIndex),
+    csvLine(thoroughfareIndex),
     csvLine(doubleDependantLocality),
     csvLine(dependantLocality),
     csvLine(postcodeIndex),
@@ -453,6 +454,7 @@ object DeliveryPoint extends AddressBaseHelpers[DeliveryPoint] {
     csvLine(updatedDateIndex)
   )
 }
+
 
 case class Classification(
                            uprn: String,
@@ -490,7 +492,6 @@ object Classification extends AddressBaseHelpers[Classification] {
     secondaryCodeFor(csvLine(classificationCodeIndex))
   )
 
-
   /**
    * Must have a valid, mapped primary classification to be valid
    * @param csvLine
@@ -500,9 +501,9 @@ object Classification extends AddressBaseHelpers[Classification] {
     super.isValidCsvLine(csvLine) && primaryCodeFor(csvLine(classificationCodeIndex)).isDefined
   }
 
-
   val mandatoryCsvColumns = List(uprnIndex, classificationCodeIndex, startDateIndex, updatedDateIndex)
 }
+
 
 /*
   These case classes are the model we translate too and persist
