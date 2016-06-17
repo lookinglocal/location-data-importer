@@ -80,7 +80,8 @@ class ModelTests extends Specification {
   "BLPU" should {
 
     "be able to identify a valid line" in {
-      val validLine = """21,"I",94755,9059007610,1,2,2005-04-05,9059007610,346782.00,732382.00,1,9059,2005-04-05,2010-04-05,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+      // val validLine = """21,"I",94755,9059007610,1,2,2005-04-05,9059007610,346782.00,732382.00,1,9059,2005-04-05,2010-04-05,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+      val validLine = """21,"I",1,200225276,1,,,200225275,524624.02,190724.36,51.6015833,-.2019473,1,5090,"E",2008-01-11,,2016-02-10,2005-11-23,"L","N3 1DA",0"""
       BLPU.isValidCsvLine(parseCsvLine(validLine)) must beTrue
     }
 
@@ -94,50 +95,55 @@ class ModelTests extends Specification {
       BLPU.isValidCsvLine(parseCsvLine(wrongNumberOfColumns)) must beFalse
     }
 
-    "be able to identify an invalid line due to missing mandatory column" in {
-      val invalidLine = """21,"I",94755,,1,2,2005-04-05,9059007610,346782.00,732382.00,1,9059,2005-04-05,2010-04-05,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+    "be able to identify an invalid line due to missing mandatory column (UPRN)" in {
+      // val invalidLine = """21,"I",94755,,1,2,2005-04-05,9059007610,346782.00,732382.00,1,9059,2005-04-05,2010-04-05,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+      val invalidLine = """21,"I",1,,1,,,200225275,524624.02,190724.36,51.6015833,-.2019473,1,5090,"E",2008-01-11,,2016-02-10,2005-11-23,"L","N3 1DA",0"""
       BLPU.isValidCsvLine(parseCsvLine(invalidLine)) must beFalse
     }
 
     "be able to be constructed from a fully populated csv line" in {
-      val line = """21,"I",94755,9059007610,1,2,2005-04-05,9059007610,346782.00,732382.00,1,9059,2005-04-05,2010-04-05,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
-      blpu(line).uprn must beEqualTo("9059007610")
+      val line = """21,"I",1,200225276,1,2,,200225275,524624.02,190724.36,51.6015833,-.2019473,1,5090,"E",2008-01-11,,2016-02-10,2005-11-23,"L","N3 1DA",0"""
+      blpu(line).uprn must beEqualTo("200225276")
       blpu(line).blpuState.get must beEqualTo(inUse)
       blpu(line).logicalState.get must beEqualTo(approved)
-      blpu(line).startDate must beEqualTo(new DateTime(2005, 4, 5, 0, 0))
-      blpu(line).lastUpdated must beEqualTo(new DateTime(2009, 5, 22, 0, 0))
-      blpu(line).endDate.get must beEqualTo(new DateTime(2010, 4, 5, 0, 0))
-      blpu(line).lat must beEqualTo(56.48052636343243)
-      blpu(line).long must beEqualTo(-2.8656333885406062)
-      blpu(line).receivesPost must beEqualTo("S")
+      blpu(line).startDate must beEqualTo(new DateTime(2008, 1, 11, 0, 0))
+      blpu(line).lastUpdated must beEqualTo(new DateTime(2016, 2, 10, 0, 0))
+      // blpu(line).endDate.get must beEqualTo(new DateTime(2010, 4, 5, 0, 0))
+      blpu(line).lat must beEqualTo(51.6015833)
+      blpu(line).long must beEqualTo(-.2019473)
+      blpu(line).receivesPost must beEqualTo("L")
       blpu(line).canReceivePost must beEqualTo(true)
-      blpu(line).postcode must beEqualTo("DD5 3BZ")
+      blpu(line).postcode must beEqualTo("N3 1DA")
     }
 
     "be able to be constructed from a csv line with only mandatory fields" in {
-      val line = """21,"I",94755,9059007610,1,,,,346782.00,732382.00,1,9059,2005-04-05,,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
-      blpu(line).uprn must beEqualTo("9059007610")
+      // val line = """21,"I",94755,9059007610,1,,,,346782.00,732382.00,51.6015833,-.2019473,1,9059,2005-04-05,,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+      // val line = """21,"I",1,905900761,1,,,,346782.00,732382.00,51.6015833,-.2019473,1,9059,2005-04-05,,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+      val line = """21,"I",1,200225276,1,,,,524624.02,190724.36,51.6015833,-.2019473,1,5090,"E",2008-01-11,,2016-02-10,2005-11-23,"L","N3 1DA",0"""
+      blpu(line).uprn must beEqualTo("200225276")
       blpu(line).blpuState must beEqualTo(None)
       blpu(line).logicalState.get must beEqualTo(approved)
-      blpu(line).startDate must beEqualTo(new DateTime(2005, 4, 5, 0, 0))
-      blpu(line).lastUpdated must beEqualTo(new DateTime(2009, 5, 22, 0, 0))
+      blpu(line).startDate must beEqualTo(new DateTime(2008, 1, 11, 0, 0))
+      blpu(line).lastUpdated must beEqualTo(new DateTime(2016, 2, 10, 0, 0))
       blpu(line).endDate must beEqualTo(None)
-      blpu(line).lat must beEqualTo(56.48052636343243)
-      blpu(line).long must beEqualTo(-2.8656333885406062)
-      blpu(line).receivesPost must beEqualTo("S")
+      blpu(line).lat must beEqualTo(51.6015833)
+      blpu(line).long must beEqualTo(-.2019473)
+      blpu(line).receivesPost must beEqualTo("L")
       blpu(line).canReceivePost must beEqualTo(true)
-      blpu(line).postcode must beEqualTo("DD5 3BZ")
+      blpu(line).postcode must beEqualTo("N3 1DA")
     }
 
     "be able to be constructed from a csv line with only mandatory fields - indicating not able to recieve post" in {
-      val line = """21,"I",94755,9059007610,1,,,,346782.00,732382.00,1,9059,2005-04-05,,2009-05-22,2005-04-05,"N","DD5 3BZ",0"""
+      val line = """21,"I",94755,9059007610,1,,,,346782.00,732382.00,51.6015833,-.2019473,1,9059,"E",2005-04-05,,2009-05-22,2005-04-05,"N","DD5 3BZ",0"""
+      // val line = """21,"I",1,200225276,1,,,200225275,524624.02,190724.36,51.6015833,-.2019473,1,5090,"E",2008-01-11,,2016-02-10,2005-11-23,"N","N3 1DA",0"""
       blpu(line).receivesPost must beEqualTo("N")
       blpu(line).canReceivePost must beEqualTo(false)
     }
 
 
     "be able to be made into correct type" in {
-      val line = """21,"I",94755,9059007610,1,,,,346782.00,732382.00,1,9059,2005-04-05,,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+      // val line = """21,"I",94755,9059007610,1,,,,346782.00,732382.00,1,9059,2005-04-05,,2009-05-22,2005-04-05,"S","DD5 3BZ",0"""
+      val line = """21,"I",1,200225276,1,,,200225275,524624.02,190724.36,51.6015833,-.2019473,1,5090,"E",2008-01-11,,2016-02-10,2005-11-23,"L","N3 1DA",0"""
       blpu(line).isInstanceOf[AddressBase] must beTrue
       blpu(line).isInstanceOf[BLPU] must beTrue
     }
@@ -238,7 +244,7 @@ class ModelTests extends Specification {
 
   "Street" should {
 
-    val completeValidLine = """11,"I",1151,709895,2,9053,2,2010-02-05,1,8,0,2008-01-25,2010-01-01,2008-10-09,2008-01-25,347600.00,734728.00,347561.00,734677.00,999"""
+    val completeValidLine = """11,"I",204043,709895,2,9053,2,2010-02-05,1,8,0,2008-01-25,2010-01-01,2016-02-06,2008-01-25,347600.00,734728.00,56.5016824,-2.8528309,347561.00,734677.00,56.5012199,-2.8534541,999"""
     val incompleteValidLine = """11,"I",1151,709895,2,9053,,,,,0,2008-01-25,,2008-10-09,2008-01-25,347600.00,734728.00,347561.00,734677.00,999"""
 
     "be able to identify a valid line" in {
@@ -263,7 +269,7 @@ class ModelTests extends Specification {
       street(completeValidLine).classification.get must beEqualTo(allVehicles)
       street(completeValidLine).startDate must beEqualTo(new DateTime(2008, 1, 25, 0, 0))
       street(completeValidLine).endDate.get must beEqualTo(new DateTime(2010, 1, 1, 0, 0))
-      street(completeValidLine).lastUpdated must beEqualTo(new DateTime(2008, 10, 9, 0, 0))
+      street(completeValidLine).lastUpdated must beEqualTo(new DateTime(2016, 2, 6, 0, 0))
     }
 
     "be able to be constructed from a minimum populated csv line" in {
@@ -287,7 +293,7 @@ class ModelTests extends Specification {
 
   "Street Descriptor " should {
 
-    val completeValidLine = """15,"I",1142,705576,"ZU315 FROM B978 NORTH OF PITKERRO HOUSE TO ZC4 JUNCTION SOUTH OF WESTHALL FARM COTTAGES","WESTHALL","KELLAS","ANGUS","ENG""""
+    val completeValidLine = """15,"I",1000000,27908108,"HEATHFIELD ROAD","","HITCHIN","HERTFORDSHIRE","ENG",2008-02-27,,2016-02-06,2000-11-30"""
     val incompleteValidLine = """15,"I",1142,705576,"ZU315 FROM B978 NORTH OF PITKERRO HOUSE TO ZC4 JUNCTION SOUTH OF WESTHALL FARM COTTAGES","","","WESTHALL","ENG""""
 
     "be able to identify a valid line" in {
@@ -315,11 +321,11 @@ class ModelTests extends Specification {
     }
 
     "be able to be constructed from a fully populated csv line" in {
-      streetDescriptor(completeValidLine).usrn must beEqualTo("705576")
-      streetDescriptor(completeValidLine).streetDescription must beEqualTo("ZU315 FROM B978 NORTH OF PITKERRO HOUSE TO ZC4 JUNCTION SOUTH OF WESTHALL FARM COTTAGES")
-      streetDescriptor(completeValidLine).localityName.get must beEqualTo("WESTHALL")
-      streetDescriptor(completeValidLine).townName.get must beEqualTo("KELLAS")
-      streetDescriptor(completeValidLine).administrativeArea must beEqualTo("ANGUS")
+      streetDescriptor(completeValidLine).usrn must beEqualTo("27908108")
+      streetDescriptor(completeValidLine).streetDescription must beEqualTo("HEATHFIELD ROAD")
+      // streetDescriptor(completeValidLine).localityName.get must beEqualTo("HITCHIN")
+      streetDescriptor(completeValidLine).townName.get must beEqualTo("HITCHIN")
+      streetDescriptor(completeValidLine).administrativeArea must beEqualTo("HERTFORDSHIRE")
       streetDescriptor(completeValidLine).language must beEqualTo("ENG")
     }
 
@@ -489,13 +495,15 @@ class ModelTests extends Specification {
       DeliveryPoint.isValidCsvLine(parseCsvLine(wrongNumberOfColumns)) must beFalse
     }
 
-    "be able to identify an invalid line due to missing mandatory column" in {
-      val invalidLine = """28,"I",262323,100021769440,,12077423,"","","","",46,"","VINCENT ROAD","","","KINGSTON UPON THAMES",,"S","","","","","","",2013-09-27,2002-12-06,,2010-09-14,2010-09-14"""
+    "be able to identify an invalid line due to missing mandatory column (postcode)" in {
+      val invalidLine = """28,"I",171951,100021769440,12077423,"","","","",,"","VINCENT ROAD","","","KINGSTON UPON THAMES","","S","2D","","","","","","",2016-02-22,2012-04-23,,2016-02-10,2012-03-19"""
       DeliveryPoint.isValidCsvLine(parseCsvLine(invalidLine)) must beFalse
     }
 
     "be able to be constructed from a fully populated csv line" in {
-      val line = """28,"I",262323,100021769440,,12077423,"","","sub building","building",46,"dependant thoroughfare","VINCENT ROAD","doubleDependantLocality","dependantLocality","KINGSTON UPON THAMES","KT1 3HJ","S","","","","","","",2013-09-27,2002-12-06,2014-01-01,2010-09-14,2010-09-14"""
+      // val line = """28,"I",262323,100021769440,,12077423,"","","sub building","building",46,"dependant thoroughfare","VINCENT ROAD","doubleDependantLocality","dependantLocality","KINGSTON UPON THAMES","KT1 3HJ","S","","","","","","",2013-09-27,2002-12-06,2014-01-01,2010-09-14,2010-09-14"""
+      // val line = """28,"I",262323,100021769440,12077423,"","","sub building","building",46,"dependant thoroughfare","VINCENT ROAD","doubleDependantLocality","dependantLocality","KINGSTON UPON THAMES","KT1 3HJ","S","","","","","","",2013-09-27,2002-12-06,2014-01-01,2010-09-14,2010-09-14"""
+      val line = """28,"I",171951,100021769440,12077423,"","","sub building","building",46,"dependant thoroughfare","VINCENT ROAD","doubleDependantLocality","dependantLocality","KINGSTON UPON THAMES","KT1 3HJ","S","2D","","","","","","",2016-02-22,2012-04-23,,2016-02-10,2012-03-19"""
       deliveryPoint(line).uprn must beEqualTo("100021769440")
       deliveryPoint(line).postcode must beEqualTo("KT1 3HJ")
       deliveryPoint(line).subBuildingName.get must beEqualTo("sub building")
@@ -505,13 +513,14 @@ class ModelTests extends Specification {
       deliveryPoint(line).thoroughfareName.get must beEqualTo("VINCENT ROAD")
       deliveryPoint(line).doubleDependantLocality.get must beEqualTo("doubleDependantLocality")
       deliveryPoint(line).dependantLocality.get must beEqualTo("dependantLocality")
-      deliveryPoint(line).startDate must beEqualTo(new DateTime(2002, 12, 6, 0, 0))
-      deliveryPoint(line).endDate.get must beEqualTo(new DateTime(2014, 1, 1, 0, 0))
-      deliveryPoint(line).lastUpdated must beEqualTo(new DateTime(2010, 9, 14, 0, 0))
+      deliveryPoint(line).startDate must beEqualTo(new DateTime(2012, 4, 23, 0, 0))
+      // deliveryPoint(line).endDate.get must beEqualTo(new DateTime(2012, 4, 23, 0, 0))
+      deliveryPoint(line).lastUpdated must beEqualTo(new DateTime(2016, 2, 10, 0, 0))
     }
 
     "be able to be constructed from a mimum populated csv line" in {
-      val line = """28,"I",262323,100021769440,,12077423,"","","","",,"","","","","KINGSTON UPON THAMES","KT1 3HJ","S","","","","","","",2013-09-27,2002-12-06,,2010-09-14,2010-09-14"""
+      // val line = """28,"I",262323,100021769440,,12077423,"","","","",,"","","","","KINGSTON UPON THAMES","KT1 3HJ","S","","","","","","",2013-09-27,2002-12-06,,2010-09-14,2010-09-14"""
+      val line = """28,"I",171951,100021769440,12077423,"","","","",,"","","","","KINGSTON UPON THAMES","KT1 3HJ","S","2D","","","","","","",2016-02-22,2012-04-23,,2016-02-10,2012-03-19"""
       deliveryPoint(line).uprn must beEqualTo("100021769440")
       deliveryPoint(line).postcode must beEqualTo("KT1 3HJ")
       deliveryPoint(line).subBuildingName must beEqualTo(None)
@@ -521,9 +530,9 @@ class ModelTests extends Specification {
       deliveryPoint(line).thoroughfareName must beEqualTo(None)
       deliveryPoint(line).doubleDependantLocality must beEqualTo(None)
       deliveryPoint(line).dependantLocality must beEqualTo(None)
-      deliveryPoint(line).startDate must beEqualTo(new DateTime(2002, 12, 6, 0, 0))
-      deliveryPoint(line).endDate.isDefined must beFalse
-      deliveryPoint(line).lastUpdated must beEqualTo(new DateTime(2010, 9, 14, 0, 0))
+      deliveryPoint(line).startDate must beEqualTo(new DateTime(2012, 4, 23, 0, 0))
+      // deliveryPoint(line).endDate.isDefined must beFalse
+      deliveryPoint(line).lastUpdated must beEqualTo(new DateTime(2016, 2, 10, 0, 0))
     }
 
     "be able to be made into correct type" in {

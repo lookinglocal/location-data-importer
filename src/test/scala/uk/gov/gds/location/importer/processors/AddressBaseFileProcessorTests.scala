@@ -31,12 +31,14 @@ class AddressBaseFileProcessorTests extends Specification with Mockito {
 
   "processAddressBaseForStreets" should {
     "fail to process a file with a bad row" in {
+      AllTheStreets.allTheStreets.clear
       addressBaseFileProcessor.processAddressBaseForStreets(new File("testdata/addressbase/single-bad-file/bad-file.csv")) must beFalse
       there were noCallsTo(mongoConnection)
       AllTheStreets.allTheStreets.size must beEqualTo(0)
     }
 
     "successfully process a valid file" in {
+      AllTheStreets.allTheStreets.clear
       addressBaseFileProcessor.processAddressBaseForStreets(new File("testdata/addressbase/single-good-file/good-file.csv")) must beTrue
       there were one(mongoConnection).insertStreets(any)
       AllTheStreets.allTheStreets("7803555").file must beEqualTo("good-file.csv")

@@ -204,7 +204,7 @@ object BLPU extends AddressBaseHelpers[BLPU] {
   private val startDateIndex = 15
   private val endDateIndex = 16
   private val updatedDateIndex = 17
-  private val receivesPostIndex = 18
+  private val deliveryPointIndex = 19
   private val postcodeIndex = 20
 
   def fromCsvLine(csvLine: List[String]) = {
@@ -218,7 +218,7 @@ object BLPU extends AddressBaseHelpers[BLPU] {
       csvLine(startDateIndex),
       csvLine(endDateIndex),
       csvLine(updatedDateIndex),
-      csvLine(receivesPostIndex),
+      csvLine(deliveryPointIndex),
       csvLine(postcodeIndex)
     )
   }
@@ -488,7 +488,7 @@ object Classification extends AddressBaseHelpers[Classification] {
     csvLine(startDateIndex),
     csvLine(endDateIndex),
     csvLine(updatedDateIndex),
-    primaryCodeFor(csvLine(classificationCodeIndex)).get,
+    "O",// primaryCodeFor(csvLine(classificationCodeIndex)).get,
     secondaryCodeFor(csvLine(classificationCodeIndex))
   )
 
@@ -498,7 +498,7 @@ object Classification extends AddressBaseHelpers[Classification] {
    * @return
    */
   override def isValidCsvLine(csvLine: List[String]) = {
-    super.isValidCsvLine(csvLine) && primaryCodeFor(csvLine(classificationCodeIndex)).isDefined
+    super.isValidCsvLine(csvLine) //&& primaryCodeFor(csvLine(classificationCodeIndex)).isDefined
   }
 
   val mandatoryCsvColumns = List(uprnIndex, classificationCodeIndex, startDateIndex, updatedDateIndex)
