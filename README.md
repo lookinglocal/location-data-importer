@@ -47,6 +47,12 @@ Use [SBT](http://www.scala-sbt.org/) to build the importer jar file:
 $ ./sbt clean assembly
 ```
 
+### Testing
+
+```shell
+$ ./sbt test
+```
+
 ### Running
 
 ```shell
@@ -190,9 +196,9 @@ We don't treat all BLPUs as valid, and some will be skipped according to the fol
 
 ### Persisting Addresses
 
-Once a list of AddressWrappers (an object containing the BLPU, LPI, Classification and optional Organisation) are created we iterate through this list constructing the Address format we want to persist. 
+Once a list of AddressWrappers (an object containing the BLPU, LPI, Classification and optional Organisation) are created we iterate through this list constructing the Address format we want to persist.
 
-We query the code points and street collections in mongo by postcode and USRN (unique street reference number, present on an LPI) respectively to aquire the details of the Country and Local Authority (codepoint) and street (street) 
+We query the code points and street collections in mongo by postcode and USRN (unique street reference number, present on an LPI) respectively to aquire the details of the Country and Local Authority (codepoint) and street (street)
 
 Example JSON:
 

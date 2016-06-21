@@ -31,7 +31,7 @@ object FileUtilities {
   def isDirectory(location: String) = new File(location).isDirectory
 
   /* Exclude any dotfiles in directories scanned for CSV files. */
-  def directoryContents(location: String) = new File(location).listFiles().toList.filter(_.getName.startsWith("."))
+  def directoryContents(location: String) = new File(location).listFiles().toList.filter(!_.getName.startsWith("."))
 
   def filteredDirectoryContents(location: String, fileFilter: File => Boolean) = directoryContents(location).filter(fileFilter)
 

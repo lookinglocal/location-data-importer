@@ -2,15 +2,19 @@ package uk.gov.gds.location.importer.model
 
 object ClassificationCodes {
 
-
+  def isNumeric(str: String): Boolean = {
+    str.matches(s"""^\\d+""")
+  }
 
   def primaryCodeFor(classification: String) = {
     if (classification.length <= 0) None
+    else if (isNumeric(classification)) primaryCodes.get("U")
     else primaryCodes.get(classification.substring(0, 1))
   }
 
   def secondaryCodeFor(classification: String) = {
     if (classification.length < 2) None
+    else if (isNumeric(classification)) primaryCodes.get("U")
     else secondaryCodes.get(classification.substring(0, 2))
   }
 
@@ -34,7 +38,14 @@ object ClassificationCodes {
     "R" -> "Residential",
     "U" -> "Unclassified",
     "X" -> "Dual Use",
-    "Z" -> "Object of interest"
+    "Z" -> "Object of interest",
+
+    // Codes that are not in the current list of codes from OS.
+    "E" -> "Unclassified",
+    "F" -> "Unclassified",
+    "I" -> "Unclassified",
+    "N" -> "Unclassified",
+    "T" -> "Unclassified"
   )
 
   private val secondaryCodes = Map(
@@ -97,6 +108,13 @@ object ClassificationCodes {
     "ZM" -> "Monument",
     "ZS" -> "Stately Home",
     "ZU" -> "Underground Feature",
-    "ZW" -> "Place Of Worship"
+    "ZW" -> "Place Of Worship",
+
+    // Codes that are not in the current list of codes from OS.
+    "FE" -> "Unclassified",
+    "EL" -> "Unclassified",
+    "IF" -> "Unclassified",
+    "NT" -> "Unclassified",
+    "TX" -> "Unclassified"
   )
 }
