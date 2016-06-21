@@ -34,7 +34,6 @@ class ProcessAddressBaseFiles(processors: AddressBaseFileProcessor) extends Logg
       case _ => processForAddresses(filePath)
     }
 
-
   private def processForCodePoints(filePath: String) = {
     val files = directoryContents(filePath)
     resultOf("codepoint", files.zipWithIndex.map {
@@ -70,14 +69,10 @@ class ProcessAddressBaseFiles(processors: AddressBaseFileProcessor) extends Logg
   }
 
   private def resultOf(pass: String, fileResult: List[Boolean]) = {
-
-    /*
-      Results partitioned on result type, 1) Success 2) Failure
-     */
+    // Results partitioned on result type, 1) Success 2) Failure
     val overallResult = fileResult.partition(result => result == true)
-    /*
-      Partitions used to count success / error rows
-     */
+
+    // Partitions used to count success / error rows
     overallResult match {
       case results if results._2.isEmpty => Result(Success, "processed " + pass + ": [" + overallResult._1.size + "] files")
       case _ => Result(Failure, "processed " + pass + ": " + overallResult._1.size + " files successfully and " + overallResult._2.size + " files with errors")
@@ -96,5 +91,5 @@ class ProcessAddressBaseFiles(processors: AddressBaseFileProcessor) extends Logg
 
   private def allFilesAreNotCsvFiles(filePath: String) = !nonCsvFilesFor(filePath).isEmpty
 
-  private def nonCsvFilesFor(filePath: String) = directoryContents(filePath).filter(file => !file.getName.endsWith(".csv"))
+  private def nonCsvFilesFor(filePath: String) = directoryContents(filePath).filter(file => (!file.getName.endsWith(".csv") && !file.getName.startsWith(".")))
 }
