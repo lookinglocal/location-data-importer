@@ -14,7 +14,7 @@ import uk.gov.gds.location.importer.processors.AddressBaseFileProcessor
  */
 object LocationDataImporter extends Logging {
 
-  case class Config(dir: String = "", codePoint: String = "", addressOnly: Boolean = false, username: String = "", password: String = "")
+  case class Config(dir: String = "", streetsDir: String = "", codePoint: String = "", addressOnly: Boolean = false, username: String = "", password: String = "")
 
   def logStartOfRun() {
     logger.info("=== Starting Run at " + new DateTime + " ===")
@@ -25,15 +25,17 @@ object LocationDataImporter extends Logging {
   }
 
   def main(args: Array[String]) {
-
     RegisterJodaTimeConversionHelpers()
 
     val opts = new OptionParser[Config]("Location Data Importer") {
       head("Parse and import location data", "0.1")
-      opt[String]('a', "addresses") required() text "Location of address base files files" action {
+      opt[String]('a', "addresses") required() text "Location of address base files" action {
         (dir: String, c: Config) => c.copy(dir = dir)
       }
-      opt[String]('c', "codepoint") required() text "Location of code point files)" action {
+      opt[String]('s', "streets") text "Location of address base streets files" action {
+        (streetsDir: String, c: Config) => c.copy(streetsDir = streetsDir)
+      }
+      opt[String]('c', "codepoint") text "Location of code point files)" action {
         (file: String, c: Config) => c.copy(codePoint = file)
       }
       opt[Unit]('o', "addressOnly") text "Only do address import stage. (Default process all stages)" action {
@@ -94,60 +96,43 @@ object LocationDataImporter extends Logging {
     }
   }
 
-
   private def processAddresses(config: Config, processors: ProcessAddressBaseFiles, mongoConnection: MongoConnection) = {
-
     val resultForAddresses = processors.processAddressBaseFilesForAddresses(config.dir)
 
-    /* insert the test address */
+    // insert the test address
     mongoConnection.insertAddresses(List(TestAddress.testAddress.serialize))
 
-    /*
-      Add indexes to address rows
-     */
+    // Add indexes to address rows
     logger.info("adding indexes")
     mongoConnection.addAddressIndexes()
 
-    /*
-      Log result summary
-     */
     logResults("addresses", resultForAddresses)
   }
 
   private def processStreets(config: Config, processors: ProcessAddressBaseFiles, mongoConnection: MongoConnection) = {
-    /*
-      Process all addressbase files for street data
-    */
-    val resultForStreets = processors.processAddressBaseFilesForStreets(config.dir)
+    // Process all addressbase files for street data. If files are given in a
+    // separate directory, process only those.
+    var dir = config.dir
+    if (config.streetsDir.size > 0) {
+      dir = config.streetsDir
+    }
+    val resultForStreets = processors.processAddressBaseFilesForStreets(dir)
 
-    /*
-      Add indexes on streets
-     */
+    // Add indexes on streets
     logger.info("adding street indexes")
     mongoConnection.addStreetIndexes()
 
-    /*
-     Log result summary
-    */
     logResults("streets", resultForStreets)
-
   }
 
   private def processCodePoint(config: Config, processors: ProcessAddressBaseFiles, mongoConnection: MongoConnection) = {
-    /*
-       Process Code Points for Local Authority code lookups
-      */
+    // Process Code Points for Local Authority code lookups
     val resultForCodePoint = processors.processCodePointFiles(config.codePoint)
 
-    /*
-      Add indexes on codepoints
-     */
+    // Add indexes on codepoints
     logger.info("adding codepoint indexes")
     mongoConnection.addCodePointIndexes()
 
-    /*
-      Log result summary
-    */
     logResults("codepoint", resultForCodePoint)
   }
 
