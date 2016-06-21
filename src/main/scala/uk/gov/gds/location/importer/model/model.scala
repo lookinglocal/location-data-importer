@@ -488,7 +488,7 @@ object Classification extends AddressBaseHelpers[Classification] {
     csvLine(startDateIndex),
     csvLine(endDateIndex),
     csvLine(updatedDateIndex),
-    "O",// primaryCodeFor(csvLine(classificationCodeIndex)).get,
+    primaryCodeFor(csvLine(classificationCodeIndex)).get,
     secondaryCodeFor(csvLine(classificationCodeIndex))
   )
 
@@ -498,7 +498,7 @@ object Classification extends AddressBaseHelpers[Classification] {
    * @return
    */
   override def isValidCsvLine(csvLine: List[String]) = {
-    super.isValidCsvLine(csvLine) //&& primaryCodeFor(csvLine(classificationCodeIndex)).isDefined
+    super.isValidCsvLine(csvLine) && primaryCodeFor(csvLine(classificationCodeIndex)).isDefined
   }
 
   val mandatoryCsvColumns = List(uprnIndex, classificationCodeIndex, startDateIndex, updatedDateIndex)
