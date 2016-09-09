@@ -138,7 +138,7 @@ object AddressBaseToLocateConvertor extends Logging {
     street = chooseStreetDescription(addressWrapper.lpi, street, addressWrapper.deliveryPoint, file).flatMap(n => n)
   )
 
-  def location(blpu: BLPU) = Location(blpu.lat, blpu.long)
+  def location(blpu: BLPU) = Location(blpu.lat, blpu.long, blpu.easting, blpu.northing)
 
   /**
    * Construct the presentation object

@@ -1279,5 +1279,5 @@ class AddressBaseToLocateConvertorTests extends Specification with Mockito {
   }
 
   private lazy val validDetails = Details(blpuCreatedAt = new DateTime, blpuUpdatedAt = new DateTime, classification = "classification", isPostalAddress = false, isCommercial = false, isResidential = false, isElectoral = false, isHigherEducational = false, usrn = "usrn", file = "file", organisation = None, primaryClassification = "pc", secondaryClassification = None)
-  private lazy val validLocation = Location(1.1, 2.2)
+  private lazy val validLocation = Location(1.1, 2.2, 3.3, 4.4)
 }

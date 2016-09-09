@@ -177,6 +177,8 @@ case class BLPU(
                  logicalState: Option[LogicalStatusCode],
                  lat: Double,
                  long: Double,
+                 easting: Double,
+                 northing: Double,
                  localCustodianCode: String,
                  startDate: DateTime,
                  endDate: Option[DateTime],
@@ -214,6 +216,8 @@ object BLPU extends AddressBaseHelpers[BLPU] {
       LogicalStatusCode.forId(csvLine(logicalStateIndex)),
       csvLine(latitudeIndex),
       csvLine(longitudeIndex),
+      csvLine(eastingIndex),
+      csvLine(northingIndex),
       csvLine(localCustodianCodeIndex),
       csvLine(startDateIndex),
       csvLine(endDateIndex),
@@ -506,9 +510,9 @@ object Classification extends AddressBaseHelpers[Classification] {
 
 
 /*
-  These case classes are the model we translate too and persist
+  These case classes are the model we translate to and persist.
  */
-case class Location(lat: Double, long: Double)
+case class Location(lat: Double, long: Double, easting: Double, northing: Double)
 
 case class Details(
                     blpuCreatedAt: DateTime,

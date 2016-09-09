@@ -42,7 +42,7 @@ object TestAddress {
       saoText = Some("property")
     )
 
-    val l = Location(1.1, 0.0)
+    val l = Location(1.1, 0.0, 1.0, 0.0)
 
     Address(
       postcode = "x11xx",
