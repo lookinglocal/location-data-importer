@@ -20,6 +20,7 @@ object TestHelpers {
     Some("thoroughfareName"),
     Some("doubleDependantLocality"),
     Some("dependantLocality"),
+    Some("postTown"),
     "POSTCODE",
     startDate,
     None,

@@ -419,6 +419,7 @@ case class DeliveryPoint(
                           thoroughfareName: Option[String],
                           doubleDependantLocality: Option[String],
                           dependantLocality: Option[String],
+                          postTown: Option[String],
                           postcode: String,
                           startDate: DateTime,
                           endDate: Option[DateTime],
@@ -436,6 +437,7 @@ object DeliveryPoint extends AddressBaseHelpers[DeliveryPoint] {
   private val thoroughfareIndex = 11
   private val doubleDependantLocality = 12
   private val dependantLocality = 13
+  private val postTownIndex = 14
   private val postcodeIndex = 15
   private val startDateIndex = 25
   private val endDateIndex = 26
@@ -452,6 +454,7 @@ object DeliveryPoint extends AddressBaseHelpers[DeliveryPoint] {
     csvLine(thoroughfareIndex),
     csvLine(doubleDependantLocality),
     csvLine(dependantLocality),
+    csvLine(postTownIndex),
     csvLine(postcodeIndex),
     csvLine(startDateIndex),
     csvLine(endDateIndex),
@@ -537,6 +540,7 @@ case class Presentation(
                          street: Option[String],
                          locality: Option[String] = None,
                          town: Option[String] = None,
+                         postTown: Option[String] = None,
                          area: Option[String] = None,
                          postcode: String
                          )

@@ -177,6 +177,12 @@ object AddressBaseToLocateConvertor extends Logging {
       case _ => None
     }
 
+    val postTown = deliveryPoint match {
+      case Some(dp) if dp.postTown.isDefined => Some(dp.postTown.get)
+      case None => None
+      case _ => None
+    }
+
     val area = streetDescription match {
       case Some(sd) if !constructArea(street).getOrElse("").equalsIgnoreCase(sd) => constructArea(street)
       case None => constructArea(street)
@@ -188,6 +194,7 @@ object AddressBaseToLocateConvertor extends Logging {
       street = streetDescription,
       locality = locality,
       town = town,
+      postTown = postTown,
       area = area,
       postcode = blpu.postcode
     )

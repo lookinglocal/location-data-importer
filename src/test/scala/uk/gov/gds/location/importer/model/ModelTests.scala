@@ -513,6 +513,7 @@ class ModelTests extends Specification {
       deliveryPoint(line).thoroughfareName.get must beEqualTo("VINCENT ROAD")
       deliveryPoint(line).doubleDependantLocality.get must beEqualTo("doubleDependantLocality")
       deliveryPoint(line).dependantLocality.get must beEqualTo("dependantLocality")
+      deliveryPoint(line).postTown.get must beEqualTo("KINGSTON UPON THAMES")
       deliveryPoint(line).startDate must beEqualTo(new DateTime(2012, 4, 23, 0, 0))
       // deliveryPoint(line).endDate.get must beEqualTo(new DateTime(2012, 4, 23, 0, 0))
       deliveryPoint(line).lastUpdated must beEqualTo(new DateTime(2016, 2, 10, 0, 0))
