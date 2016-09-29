@@ -35,7 +35,8 @@ object TestAddress {
       file = "test.csv",
       organisation = None,
       primaryClassification = "Residential",
-      secondaryClassification = Some("Dwelling")
+      secondaryClassification = Some("Dwelling"),
+      custodian = Some("custodian")
     )
 
     val o = OrderingHelpers(

@@ -64,6 +64,13 @@ object AddressBaseToLocateConvertor extends Logging {
     }
   }
 
+  def custodianName(addressWrapper: AddressBaseWrapper) = {
+    localAuthoritiesByCustodianCode.get(addressWrapper.blpu.localCustodianCode) match {
+      case Some(la) => Some(la.onsName)
+      case _ => None
+    }
+  }
+
   def address(addressWrapper: AddressBaseWrapper, gssCode: String, street: StreetWithDescription, fileName: String) = {
     val address = Address(
       gssCode = gssCode,
@@ -227,7 +234,8 @@ object AddressBaseToLocateConvertor extends Logging {
     file = filename,
     organisation = toSentenceCase(addressWrapper.organisation.map(org => org.organistation)),
     primaryClassification = addressWrapper.classification.primaryUse,
-    secondaryClassification = addressWrapper.classification.secondaryUse
+    secondaryClassification = addressWrapper.classification.secondaryUse,
+    custodian = custodianName(addressWrapper)
   )
 
 }

@@ -532,7 +532,8 @@ case class Details(
                     file: String,
                     organisation: Option[String],
                     primaryClassification: String,
-                    secondaryClassification: Option[String]
+                    secondaryClassification: Option[String],
+                    custodian: Option[String]
                     )
 
 case class Presentation(
