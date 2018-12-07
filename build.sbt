@@ -16,7 +16,7 @@ libraryDependencies ++= Seq(
     "joda-time" % "joda-time" % "2.9.1",
     "org.joda" % "joda-convert" % "1.8",
     "org.mongodb" %% "casbah" % "2.8.2",
-    "com.github.salat" % "salat-core_2.11" % "1.9.9",
+    "com.novus" %% "salat" % "1.9.9" pomOnly(),
     "org.specs2" %% "specs2-core" % "3.6.6" % "test",
     "org.specs2" % "specs2-mock_2.11" % "3.6.6" % "test"
 )
