@@ -9,7 +9,7 @@ parallelExecution := false
 libraryDependencies ++= Seq(
     "org.geotools" % "gt-main" % "9.3",
     "org.geotools" % "gt-epsg-hsql" % "9.3",
-    "javax.media" %"jai_core" % "1.1.3" from "http://maven.geotoolkit.org/javax/media/jai_core/1.1.3/jai_core-1.1.3.jar",
+    "javax.media" %"jai_core" % "1.1.3",
     "com.github.scopt" %% "scopt" % "3.3.0",
     "com.github.scala-incubator.io" % "scala-io-core_2.11" % "0.4.3",
     "ch.qos.logback" % "logback-classic" % "1.1.3",
