@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.8.4"
+}
+
+apply plugin: 'maven-publish'
+
+// Read the Maven artifact's version and name from build.sbt
+def build_sbt = new File('build.sbt').text
+def artifactVersion = (build_sbt =~/(?:version\s*:=\s*\"([0-9.]*)\"*)+/)[0][1]
+def artifactName = (build_sbt =~/(?:name\s*:=\s*\"([^"]*)\"*)+/)[0][1]
+println "*${artifactName}*${artifactVersion}*"
+
+publishing {
+    publications {
+        MavenPublish(MavenPublication) {
+            artifacts = ["target/scala-2.11/${artifactName}.jar"]
+            groupId 'uk.gov.gds.location'
+            artifactId artifactName
+
+            // This is the version number used in the pom.xml
+            version artifactVersion
+        }
+    }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER') ?: BINTRAY_USER
+    key = System.getenv('BINTRAY_KEY') ?: BINTRAY_KEY
+
+    publications = ['MavenPublish']
+
+    // Whether version should be auto published after an upload
+    publish = true
+
+    pkg {
+        repo = 'maven-dependencies'
+        name = artifactName
+        userOrg = 'lookinglocal'
+
+        version {
+            // This is the version number shown in the Bintray UI
+            name = artifactVersion
+        }
+    }
+}

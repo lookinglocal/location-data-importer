@@ -3,4 +3,4 @@ scala:
   - 2.11.7
 
 script:
-  - sbt clean test assembly
+  - sbt clean test assembly && ./gradlew bintrayUpload
