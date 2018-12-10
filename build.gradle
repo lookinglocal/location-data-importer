@@ -39,7 +39,7 @@ bintray {
     publish = true
 
     pkg {
-        repo = 'maven-dependencies'
+        repo = 'maven-public'
         name = artifactName
         userOrg = 'lookinglocal'
 
