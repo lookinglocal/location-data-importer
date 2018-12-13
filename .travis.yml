@@ -23,4 +23,5 @@ script:
   - echo "db.addresses.count()" | mongo locate
   - echo "db.postcodeToAuthority.count()" | mongo locate
   - echo "db.streets.count()" | mongo locate
+  - cat /tmp/location-data-importer.log
   - set +e
