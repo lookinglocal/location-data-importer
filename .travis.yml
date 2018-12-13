@@ -17,7 +17,7 @@ script:
   - set -e
   - git clone --depth 1 https://${GITHUB_TOKEN}@github.com/lookinglocal/ordnance-survey-data
   - unzip ordnance-survey-data/addressbase/\*.zip -d ordnance-survey-data/addressbase/csv
-  - unzip ordnance-survey-data/codepoint/\*.zip
+  - unzip ordnance-survey-data/codepoint/\*.zip -d ordnance-survey-data/codepoint
   - java -jar target/scala-2.11/location-data-importer.jar -a ordnance-survey-data/addressbase/csv -c ordnance-survey-data/codepoint/Data/CSV
   - echo "show collections" | mongo locate
   - echo "db.addresses.count()" | mongo locate
