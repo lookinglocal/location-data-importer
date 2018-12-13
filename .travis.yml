@@ -2,10 +2,6 @@ language: scala
 scala:
 - 2.11.7
 
-env:
-  global:
-    secure: "XJSX3etalsP5Qq4Iy+jE1KRauHOs7505NrxfNA9TUm3YUvDepszjbUkTdXYyhdLy/CFiB1/ptKuNkLGn6o4dNesaPYSCrNh56PKdL1sqAG2obCsG6AFf6g8V0NYfSPrQcc/IiL2YX21hegmF7fbqQC++bUrg8hrqyK4K3GaRSU/WmKdLmN8AjWtvPqYd9p2x+53tAExcfw4uQaqT0Q90wX0B5hxaqQol9HgFPRoY9Vc3tQXpTiDV2qoSZo/Vm3N9KaS/wIAqT97OB+H7YM9WG/Jt/25yv3UeV/vuf53oneEWa74hI8HXtKRCXcDOTVU7suIQTy4qC3QuG9LiQ++9VVArF12cRx7TufhFoVYTI9Ii1DNDJeCdY8pbTI0wJ86Sx2oVgWin6g1xDuX+US94oIlG5zPnxEglkrBE3RN2NSBpiKlVahhSQBnTCglGoTwoD+r1sEx6ieM1XWFZTIQ0C1nToChflNdqFrU4WridqNB8Zx7gvwY0c0Xj6ftoa5P6qp/t4DZR0zLZyyBQD4vUyY1PjvOgg6FbJMllySS+y8ROCv9u9igWMNV6vnuW06JqUpDK+heIjTiFRbBBJTcrWJDSeuwSEtDSYz+ZBa2NFWkVP6pnsJMkptJxY+DzwExlgxMaylXzanHr2Vq/snQi7Ao95vy+8PmDhq9i/z5xdiA="
-
 services:
 - mongodb
 
