@@ -85,3 +85,4 @@ ertp-ems-csv/output/*
 
 # local cache of downloaded data
 cache
+ordnance-survey-data

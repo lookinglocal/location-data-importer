@@ -1,6 +1,27 @@
 language: scala
+
 scala:
   - 2.11.7
 
-script:
+services:
+- mongodb
+
+env:
+  global:
+    - secure: "m1h6WpK1uN2GzXttvR/uAmuZpktDWkvjrH4RPq+3MfkIjqXZzoTXMsU+ruFPNnQLlH8/MeBI8XBCWrZQt+6oT52DcE1ppQ9x7zTqDX4257k66o39N4CSx8ws7n1H3/E6DhfcLDxiScQYD73A7UB6bed7ny1MRVy6wEA8UeNQQP/mQc7FWp57UncTwOaQAUX6VEkLmN990vSPtU48r3KAcPuA67jf/wrUX6GcWhwZ8G3LfnveXfjt75X2tqcBkza2R4Ira6OAUji4xKU0fjZUVr94/3JjJEZWznUvLBurYycAJCEvHy6L+YJd3dHKMF2sWGMBcf1RHAsORG6q4eELaJK7xoNOzsmjJPsrJDW3y3eyVGzkijImsgoOXFUTTNrE2oN+iG6v0laSxUTjNknL9FJiCwFscwHP8YkHatJGvJJLP7lr3k+qfB0yk4nxExB0n5+dEYwfuemsXUH6Z9J+asAQNtmm3gYlQAphd0RGklhbb21icjFjliAXg9L1yQwT2BB38lIbUukOGh6dd+vbY3ODvjVKVCoqSf2z6zFX4Y14JuddG538dMNJZsiqX6O/lseGpkxucj1CnsftiAHkkrn223UfQhwinw2Y0FGPDsQgu/2zrKtn7FzRagS97dNLorx9CoBYWdS4Az9NhENE0BomPnFIuiVEAo8zd7ARvFE="
+
+before_script:
   - sbt clean test assembly
+
+script:
+  - set -e
+  - echo "printjson(db.serverStatus())"  | mongo
+  - git clone --depth 1 https://${GITHUB_TOKEN}@github.com/lookinglocal/ordnance-survey-data
+  - unzip ordnance-survey-data/addressbase/\*.zip -d ordnance-survey-data/addressbase/csv
+  - unzip ordnance-survey-data/codepoint/\*.zip
+  - java -jar target/scala-2.11/location-data-importer.jar -a ordnance-survey-data/addressbase/csv -c ordnance-survey-data/codepoint/Data/CSV
+  - echo "show collections" | mongo locate
+  - echo "db.addresses.count()" | mongo locate
+  - echo "db.postcodeToAuthority.count()" | mongo locate
+  - echo "db.streets.count()" | mongo locate
+  - set +e
