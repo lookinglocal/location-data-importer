@@ -8,14 +8,13 @@ cache:
     - $HOME/.ivy2/cache
 
 services:
-- mongodb
+  - mongodb
 
 before_script:
   - sbt clean test assembly
 
 script:
   - set -e
-  - echo "printjson(db.serverStatus())"  | mongo
   - git clone --depth 1 https://${GITHUB_TOKEN}@github.com/lookinglocal/ordnance-survey-data
   - unzip ordnance-survey-data/addressbase/\*.zip -d ordnance-survey-data/addressbase/csv
   - unzip ordnance-survey-data/codepoint/\*.zip
